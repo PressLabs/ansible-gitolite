@@ -2,6 +2,12 @@
 
 This role installs and configures gitolite from upstream Git repository.
 
+# Modifications from original
+
+1. Include everything from `conf/conf.d/*.conf`, `conf/groups/*.conf` and
+   `conf/repos/*.conf` in the configuration
+2. Configure `gitolite.conf` regardless of `gitolite_repositories` and
+   `gitolite_repositories_custom` setting.
 
 # Requirements
 

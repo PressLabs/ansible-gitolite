@@ -7,6 +7,10 @@
 #                  ||----w |
 #                  ||     ||
 #
+include "groups/*.conf"
+include "repos/*.conf"
+include "pre.d/*.conf"
+
 {% macro gitolite_repo(r) -%}
 repo {{ r.repo }}
 {% if 'admin' in r and r['admin']|count > 0 -%}
@@ -66,3 +70,5 @@ repo {{ r.repo }}
 {{ iter_repos(gitolite_repositories) }}
 # Custom repositories
 {{ iter_repos(gitolite_repositories_custom) }}
+
+include "post.d/*.conf"

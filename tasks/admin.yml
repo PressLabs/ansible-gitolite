@@ -33,12 +33,28 @@
     owner={{ gitolite_user_name }}
     group={{ gitolite_user_group }}
 
+- name: Create conf/groups/ and conf/repos/ folders
+  tags: gitolite
+  file: dest={{ gitolite_user_home  }}/gitolite-admin/conf/{{ item }} state=directory
+    mode=0750
+    owner={{ gitolite_user_name }}
+    group={{ gitolite_user_group }}
+  with_items: ['groups', 'repos', 'pre.d', 'post.d']
+
+- name: Setup conf/groups/ and conf/repos/ folders
+  tags: gitolite
+  register: gitolite_conf_dirs
+  copy: dest={{ gitolite_user_home  }}/gitolite-admin/conf/{{ item }}/.empty content="git dummy empty file"
+    mode=0750
+    owner={{ gitolite_user_name }}
+    group={{ gitolite_user_group }}
+  with_items: ['groups', 'repos', 'pre.d', 'post.d']
 
 # Manage changes inside the gitolite-admin repository
 #   stage changes
 - name: git add gitolite-admin
   tags: gitolite
-  when: gitolite_install_gitolite_conf.changed or gitolite_install_gitolite_ssh_user_accounts.changed
+  when: gitolite_install_gitolite_conf.changed or gitolite_install_gitolite_ssh_user_accounts.changed or gitolite_conf_dirs.changed
   register: gitolite_git_add_gitolite_admin
   sudo: yes
   sudo_user: "{{ gitolite_user_name }}"
